@@ -1,22 +1,14 @@
 // Récupération des cases à clicker
 let items = [...document.getElementsByClassName("grid-item")];
+let player = document.getElementById("player");
 let myScore = document.getElementById("my-score");
 let pcScore = document.getElementById("pc-score");
-let currentResult = document.getElementsByClassName("current-result");
-let item1 = document.getElementById("i1");
-let item2 = document.getElementById("i2");
-let item3 = document.getElementById("i3");
-let item4 = document.getElementById("i4");
-let item5 = document.getElementById("i5");
-let item6 = document.getElementById("i6");
-let item7 = document.getElementById("i7");
-let item8 = document.getElementById("i8");
-let item9 = document.getElementById("i9");
+let restartGame = document.getElementsByClassName("restart-game");
 
 let state = {
-    yoU: 0,
+    joueurEnCours: "YOU",
+    Me: 0,
     pC: 0,
-    null: 0,
     i1: 0,
     i2: 0,
     i3: 0,
@@ -28,9 +20,21 @@ let state = {
     i9: 0,
 };
 
+const resetAllItems = () => {
+    state.i1 = 0;
+    state.i2 = 0;
+    state.i3 = 0;
+    state.i4 = 0;
+    state.i5 = 0;
+    state.i6 = 0;
+    state.i7 = 0;
+    state.i8 = 0;
+    state.i9 = 0;
+};
+
 //possibilités de victoires
 
-const WinnerOrLoser = () => {
+const verifyWinOrLose = () => {
     if (
         (state.i1 == state.i2 && state.i2 == state.i3 && state.i1 > 0) ||
         (state.i1 == state.i4 && state.i4 == state.i7 && state.i1 > 0) ||
@@ -58,17 +62,34 @@ const WinnerOrLoser = () => {
     }
 };
 
-//jouer une case
-
-const clickItem = (e) => {
+const jouerCase = (e) => {
     let idItem = e.target.id;
+
+    /* console.log(e);*/ //affiche tout les évènements possible danas chaque case
+
+    /* console.log(idItem);*/ //récupère les 'id' des case
+
     if (state[idItem] !== 0) return;
 
-    state[idItem] = state.yoU;
+    state[idItem] = state.joueurEnCours;
 
-    let = WinnerOrLoser();
+    let WinTheGame = verifyWinOrLose();
+
+    if (WinTheGame === true) {
+        alert("Félicitation, vous avez gagné le jeu! ");
+        resetAllItems();
+        items.forEach((item) => (item.textContent = ""));
+    } else if (WinTheGame === null) {
+        alert("Match null");
+        resetAllItems();
+        items.forEach((item) => (item.textContent = ""));
+    } else if (WinTheGame === false) {
+        alert("Oups, vous avez perdu. ");
+        resetAllItems();
+        items.forEach((item) => (item.textContent = ""));
+    }
 };
 
 items.forEach((el) => {
-    el.addEventListener("click", clickItem);
+    el.addEventListener("click", jouerCase);
 });
